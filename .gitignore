@@ -1,2 +1,29 @@
+# Raw and processed data — never commit financial data to git
+data/raw/
+data/processed/
+
+# Python
+__pycache__/
+*.py[cod]
 .venv/
 .venv-1/
+*.egg-info/
+dist/
+build/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Model artifacts (large binary files)
+*.pt
+*.pkl
+*.joblib
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/settings.json
+.idea/
