@@ -24,6 +24,9 @@ build/
 .DS_Store
 Thumbs.db
 
+# Personal project docs — not for public repo
+FinSignal_Project_Blueprint.docx
+
 # IDE
 .vscode/settings.json
 .idea/

@@ -1,0 +1,14 @@
+[
+  "sentiment_mean",
+  "sentiment_std",
+  "sentiment_min",
+  "pct_positive",
+  "pct_negative",
+  "prep_sentiment_mean",
+  "prep_sentiment_std",
+  "qa_sentiment_mean",
+  "qa_sentiment_std",
+  "qa_prep_delta",
+  "transcript_length",
+  "n_chunks_total"
+]
