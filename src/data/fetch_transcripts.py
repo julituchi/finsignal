@@ -193,7 +193,7 @@ def get_transcript_text(cik: str, accession: str) -> str | None:
         # Ticker-named filing (NVDA style: nvda-20240522.htm)
         if re.search(r"^[a-z]{1,5}-\d{8}\.htm$", name):
             return 1
-        # CFO commentary / press release — explicitly deprioritise
+        # CFO commentary / press release: explicitly deprioritise
         if any(x in name for x in ["cfocommentary", "pr.htm", "8k.htm", "r1.htm"]):
             return 3
         # Fallback: largest file wins
@@ -242,7 +242,7 @@ def fetch_transcripts_for_ticker(
     for filing in filings:
         out_path = out_dir / f"{filing['date']}.txt"
         if out_path.exists():
-            continue  # already fetched — skip without hitting the network
+            continue  # already fetched, skip without hitting the network
 
         time.sleep(delay)
         text = get_transcript_text(cik, filing["accession"])

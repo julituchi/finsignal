@@ -1,6 +1,12 @@
-# Raw and processed data — never commit financial data to git
+# Raw and processed data: never commit financial data to git
 data/raw/
-data/processed/
+data/processed/*
+# ...except the small precomputed artifacts the Streamlit dashboard reads directly,
+# so a fresh clone can run `streamlit run app/streamlit_app.py` without rerunning the pipeline
+!data/processed/module1_features.csv
+!data/processed/module2_features.csv
+!data/processed/module2_walk_forward_predictions.csv
+!data/processed/module2_results_summary.json
 
 # Python
 __pycache__/
@@ -19,13 +25,17 @@ build/
 *.pt
 *.pkl
 *.joblib
+# ...except the two small trained artifacts the dashboard loads (~110KB combined)
+!models/module1_xgb.pkl
+!models/module2_lstm.pt
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Personal project docs — not for public repo
+# Personal project docs: not for public repo
 FinSignal_Project_Blueprint.docx
+project_explainer.html
 
 # IDE
 .vscode/settings.json

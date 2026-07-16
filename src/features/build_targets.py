@@ -3,12 +3,12 @@ src/features/build_targets.py
 ------------------------------
 Computes the two target variables for FinSignal from raw price data.
 
-Module 1 target — Post-Earnings Return Direction:
+Module 1 target: Post-Earnings Return Direction:
   • 1-day and 3-day log-return after the earnings date
   • Binary label: 1 = positive return, 0 = negative return
-  • ⚠️  Only computed AFTER the earnings date — no look-ahead leakage
+  • ⚠️  Only computed AFTER the earnings date, no look-ahead leakage
 
-Module 2 target — Realized Volatility:
+Module 2 target: Realized Volatility:
   • Rolling 21-day realized volatility (annualized std dev of log-returns)
   • Also compute the 5-day forward realized vol (the prediction target)
   • ⚠️  Forward vol uses only future dates relative to prediction point
@@ -71,7 +71,7 @@ def compute_realized_vol(log_returns: pd.Series,
                           annualize: bool = True) -> pd.Series:
     """
     Rolling realized volatility = std dev of log-returns over `window` days.
-    Annualized by multiplying by sqrt(252) — the number of trading days/year.
+    Annualized by multiplying by sqrt(252), the number of trading days/year.
 
     Parameters
     ----------
@@ -96,7 +96,7 @@ def build_module1_targets(ticker: str,
 
     ⚠️  Look-ahead safety: we only look FORWARD from the earnings date.
     The training label for a given earnings call is computed from prices
-    that occur AFTER the call — this is the correct causal ordering.
+    that occur AFTER the call: this is the correct causal ordering.
 
     Parameters
     ----------
@@ -139,7 +139,7 @@ def build_module1_targets(ticker: str,
             t_h = future_days[h - 1]  # h-th trading day after t0
 
             # Cumulative log-return from t0 close to t_h close
-            # ⚠️  This is future data relative to the earnings call — correct.
+            # ⚠️  This is future data relative to the earnings call, correct.
             cum_ret = log_rets.loc[
                 (log_rets.index > t0) & (log_rets.index <= t_h)
             ].sum()
@@ -158,16 +158,16 @@ def build_module2_features(ticker: str,
     """
     Build the time-series feature matrix for Module 2 (volatility forecasting).
 
-    Features (all use only historical data at each point — no look-ahead):
+    Features (all use only historical data at each point, no look-ahead):
       - realized_vol_21d   : trailing 21-day realized vol (the main input)
       - log_return         : daily log-return
       - volume_norm        : volume normalized by its 21-day rolling mean
 
-    Target (forward-looking — this is what the model predicts):
+    Target (forward-looking: this is what the model predicts):
       - forward_vol_5d     : realized vol over the next 5 trading days
 
     ⚠️  The forward_vol column uses future prices. This column must NEVER
-    be used as a feature — only as the label during training.
+    be used as a feature, only as the label during training.
 
     Parameters
     ----------
@@ -194,7 +194,7 @@ def build_module2_features(ticker: str,
 
     # Forward vol: std dev of the NEXT `forward_window` returns
     # Shift by -forward_window so each row gets the future vol.
-    # ⚠️  This creates look-ahead — that's intentional for the LABEL only.
+    # ⚠️  This creates look-ahead; that's intentional for the LABEL only.
     result["forward_vol_5d"] = (
         log_rets
         .rolling(forward_window)
@@ -224,7 +224,7 @@ def build_and_save_all(tickers: list[str]) -> None:
     if m1_frames:
         m1 = pd.concat(m1_frames, ignore_index=True)
         m1.to_csv(PROCESSED_DIR / "module1_targets.csv", index=False)
-        print(f"\n✓ Saved module1_targets.csv — {len(m1)} rows")
+        print(f"\n✓ Saved module1_targets.csv: {len(m1)} rows")
 
     # Module 2
     m2_frames = []
@@ -239,7 +239,7 @@ def build_and_save_all(tickers: list[str]) -> None:
     if m2_frames:
         m2 = pd.concat(m2_frames)
         m2.to_csv(PROCESSED_DIR / "module2_features.csv")
-        print(f"\n✓ Saved module2_features.csv — {len(m2)} rows")
+        print(f"\n✓ Saved module2_features.csv: {len(m2)} rows")
 
 
 if __name__ == "__main__":

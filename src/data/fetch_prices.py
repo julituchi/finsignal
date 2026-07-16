@@ -39,7 +39,7 @@ def fetch_and_save(tickers: list[str] = UNIVERSE,
     Returns
     -------
     pd.DataFrame
-        MultiIndex columns: (field, ticker) — e.g. ('Close', 'AAPL')
+        MultiIndex columns: (field, ticker), e.g. ('Close', 'AAPL')
     """
     RAW_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -48,7 +48,7 @@ def fetch_and_save(tickers: list[str] = UNIVERSE,
         tickers,
         start=start,
         end=end,
-        auto_adjust=True,   # adjusts for splits & dividends — use this, not Adj Close
+        auto_adjust=True,   # adjusts for splits & dividends; use this, not Adj Close
         progress=True,
     )
 

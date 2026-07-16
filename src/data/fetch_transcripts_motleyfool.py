@@ -9,7 +9,7 @@ from pathlib import Path
 RAW_DIR = Path(__file__).resolve().parents[2] / "data" / "raw" / "transcripts"
 HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
 
-# Known earnings dates per ticker — YYYY-MM-DD matching Motley Fool URL dates
+# Known earnings dates per ticker: YYYY-MM-DD matching Motley Fool URL dates
 EARNINGS_DATES = {
     "AAPL": [
         ("2023-02-02", "apple-aapl-q1-2023-earnings-call-transcript"),
@@ -70,7 +70,7 @@ def fetch_transcript(date: str, slug: str) -> str | None:
     try:
         resp = requests.get(url, headers=HEADERS, timeout=15)
         if resp.status_code != 200:
-            print(f"    ✗ HTTP {resp.status_code} — {slug}")
+            print(f"    ✗ HTTP {resp.status_code}: {slug}")
             return None
     except Exception as e:
         print(f"    ✗ Request failed: {e}")
@@ -93,7 +93,7 @@ def fetch_transcript(date: str, slug: str) -> str | None:
                 break
 
     if not body:
-        print(f"    ✗ Body not found — {slug}")
+        print(f"    ✗ Body not found: {slug}")
         return None
 
     text = body.get_text(separator="\n")
@@ -107,7 +107,7 @@ def fetch_transcript(date: str, slug: str) -> str | None:
         bool(re.search(r"your (next |first )?question (comes from|is from)", t)),
     ]
     if sum(signals) < 1:
-        print(f"    ✗ No transcript signals — {slug}")
+        print(f"    ✗ No transcript signals: {slug}")
         return None
 
     return text

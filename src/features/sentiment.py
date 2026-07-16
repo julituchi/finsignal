@@ -9,7 +9,7 @@ FinBERT (ProsusAI/finbert) outputs three probabilities per sentence:
 We chunk each transcript into sentences, score each one, then aggregate
 into a set of features per transcript (mean sentiment, variance, Q&A delta, etc.)
 
-Output: a dict of features per (ticker, date) — consumed by build_nlp_features.py
+Output: a dict of features per (ticker, date), consumed by build_nlp_features.py
 """
 
 import re
@@ -78,7 +78,7 @@ def split_transcript(text: str) -> tuple[list[str], list[str]]:
 
 def _split_sentences(text: str) -> list[str]:
     """
-    Naive sentence splitter — splits on '. ', '! ', '? ' and newlines.
+    Naive sentence splitter: splits on '. ', '! ', '? ' and newlines.
     Filters out very short fragments (< 10 chars) that aren't real sentences.
     """
     # Split on sentence-ending punctuation or newlines

@@ -62,7 +62,7 @@ def test_no_look_ahead_in_labels(tmp_path):
     """
     Labels must be computed from FUTURE prices only.
     We verify that the 't0' trading day (earnings day) is NOT included
-    in the return window — returns start from t0+1.
+    in the return window; returns start from t0+1.
     """
     from src.features.build_targets import build_module1_targets
 
@@ -111,7 +111,7 @@ def test_forward_vol_no_feature_leakage():
 
     # forward_vol and realized_vol should not be identical (they cover different windows)
     corr = result["realized_vol_21d"].corr(result["forward_vol_5d"])
-    assert corr < 0.99, "Forward and trailing vol are suspiciously identical — check shift logic"
+    assert corr < 0.99, "Forward and trailing vol are suspiciously identical, check shift logic"
     assert corr > 0.0,  "Volatility should have some autocorrelation (clustering)"
 
 

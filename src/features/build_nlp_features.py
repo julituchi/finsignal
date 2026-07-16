@@ -9,7 +9,7 @@ Logic:
   find the matching sentiment JSON file and join the features.
 
   ⚠️  Look-ahead check: the sentiment features come from the transcript
-  on the earnings date itself — the labels come from future prices.
+  on the earnings date itself; the labels come from future prices.
   This is the correct causal ordering.
 
 Output: data/processed/module1_features.csv
@@ -121,7 +121,7 @@ def build_module1_features() -> pd.DataFrame:
         rows.append(row)
 
     df = pd.DataFrame(rows)
-    print(f"\n✓ Merged {len(df)} events ({missing} dropped — no transcript match)")
+    print(f"\n✓ Merged {len(df)} events ({missing} dropped, no transcript match)")
     return df
 
 
@@ -130,11 +130,11 @@ def save_features() -> pd.DataFrame:
     df = build_module1_features()
 
     if df.empty:
-        print("⚠️  No features built — check that sentiment JSONs exist.")
+        print("⚠️  No features built: check that sentiment JSONs exist.")
         return df
 
     df.to_csv(OUTPUT_CSV, index=False)
-    print(f"✓ Saved module1_features.csv — {len(df)} rows, {len(df.columns)} columns")
+    print(f"✓ Saved module1_features.csv: {len(df)} rows, {len(df.columns)} columns")
 
     # Quick summary
     print("\nFeature columns:")

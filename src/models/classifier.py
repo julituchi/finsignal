@@ -4,7 +4,7 @@ src/models/classifier.py
 XGBoost classifier for Module 1: predicting post-earnings return direction.
 
 Design decisions baked in:
-  1. Time-series cross-validation (walk-forward) — NOT random splits
+  1. Time-series cross-validation (walk-forward), NOT random splits
   2. Class imbalance handling via scale_pos_weight
   3. SHAP explainability on the final model
   4. Saves model artifact to data/processed/module1_model.json
@@ -28,7 +28,7 @@ FEATURES_CSV  = PROCESSED_DIR / "module1_features.csv"
 MODEL_PATH    = PROCESSED_DIR / "module1_model.json"
 PLOTS_DIR     = PROCESSED_DIR / "plots"
 
-# Features the model sees — never include forward-looking columns here
+# Features the model sees: never include forward-looking columns here
 FEATURE_COLS = [
     "sentiment_score",
     "sentiment_std",
@@ -36,7 +36,7 @@ FEATURE_COLS = [
     "mean_negative",
     "pct_positive",
     "pct_negative",
-    "qa_delta_score",          # Q&A minus prepared remarks — key signal
+    "qa_delta_score",          # Q&A minus prepared remarks: key signal
     "prepared_sentiment_score",
     "qa_sentiment_score",
     "transcript_length",
@@ -61,7 +61,7 @@ def time_series_cv(df: pd.DataFrame,
     Walk-forward cross-validation splits.
 
     Why NOT random splits: with random splits, training data can include
-    events from 2024 while test data includes events from 2021 — the model
+    events from 2024 while test data includes events from 2021; the model
     sees the future. Walk-forward ensures training always precedes testing.
 
     With 80 rows and 4 splits, each test fold ≈ 16 events.
@@ -168,12 +168,12 @@ def train_final_model(df: pd.DataFrame) -> xgb.XGBClassifier:
 def plot_shap(model: xgb.XGBClassifier,
                df: pd.DataFrame) -> None:
     """
-    Generate SHAP summary plot — shows which features drive predictions most.
+    Generate SHAP summary plot: shows which features drive predictions most.
 
     SHAP (SHapley Additive exPlanations) assigns each feature a contribution
     value for each prediction. It answers: "why did the model predict UP here?"
 
-    In a regulated environment (like a bank), this is not optional — a risk
+    In a regulated environment (like a bank), this is not optional; a risk
     officer needs to be able to audit what the model is responding to.
     """
     PLOTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -185,7 +185,7 @@ def plot_shap(model: xgb.XGBClassifier,
     # Summary plot: feature importance ranked by mean |SHAP value|
     plt.figure(figsize=(10, 6))
     shap.summary_plot(shap_values, X, show=False)
-    plt.title("SHAP Feature Importance — Module 1 Classifier")
+    plt.title("SHAP Feature Importance: Module 1 Classifier")
     plt.tight_layout()
     out_path = PLOTS_DIR / "shap_summary.png"
     plt.savefig(out_path, dpi=150, bbox_inches="tight")
